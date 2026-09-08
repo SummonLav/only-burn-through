@@ -2,6 +2,8 @@
 
 Next.js + TypeScript + 原生 WebGL 的图片过场实验。两张用户提供的原图已经放在 `public/images/`。
 
+![EMBER 火焰转场预览：红黄白火焰带连接冷银与熔金人像，右侧提供播放和参数控制](docs/images/ember-transition.png)
+
 ## 运行
 
 ```bash
