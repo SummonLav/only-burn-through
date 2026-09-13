@@ -18,6 +18,7 @@ uniform vec2 uToSize;
 uniform float uProgress;
 uniform float uTime;
 uniform float uWidth;
+uniform float uCoreWidth;
 uniform float uIntensity;
 
 float hash(vec2 p) {
@@ -96,10 +97,10 @@ void main() {
   float billow = fbm(vec2(p.x * 29.0 + flow.x * 4.2, p.y * 13.0 - time * 2.4));
   float fine = noise(vec2(p.x * 90.0, p.y * 45.0 - time * 6.0) + flow * 4.0);
   float width = 0.028 * uWidth;
-  // A thin connected hot core and translucent, taller licks ahead of it.
+  // Independently size the connected hot core within the translucent flame body.
   float distance = abs(d) / (width * mix(0.65, 1.5, billow));
   float body = exp(-distance * 1.18) * (0.64 + 0.5 * billow);
-  float core = exp(-distance * 4.2) * (0.76 + 0.24 * fine);
+  float core = exp(-distance * 4.2 / uCoreWidth) * (0.76 + 0.24 * fine);
   float plume = exp(-abs(d - width * 0.9) / (width * 1.35));
   plume *= smoothstep(0.38, 0.75, billow + 0.13 * fine) * 0.67;
   float fire = (body + plume) * alive;

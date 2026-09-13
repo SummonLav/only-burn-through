@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { FlameRenderer, type FlameSettings } from "@/lib/flame-renderer";
 
-const defaults: FlameSettings = { duration: 3.8, width: 1, intensity: 1.15 };
+const defaults: FlameSettings = { duration: 3.8, width: 1, coreWidth: 1, intensity: 1.15 };
 const images = [
   { src: "/images/chrome.png", label: "冷银", name: "CHROME" },
   { src: "/images/gold.png", label: "熔金", name: "GOLD" },
@@ -259,6 +259,7 @@ export function FlameStudio() {
           <div className="section-label"><span>02 <span className="label-divider">/</span> 火焰</span><button className="text-button" onClick={() => { interacted.current = true; values.current.settings = defaults; setSettings(defaults); draw(); }}>重置</button></div>
           <Slider label="转场时长" value={settings.duration} min={1.5} max={7} step={0.1} display={`${settings.duration.toFixed(1)} s`} onChange={(value) => changeSetting("duration", value)} />
           <Slider label="火焰宽度" value={settings.width} min={0.5} max={1.8} step={0.05} display={`${Math.round(settings.width * 100)}%`} onChange={(value) => changeSetting("width", value)} />
+          <Slider label="焰心宽度" value={settings.coreWidth} min={0.2} max={3} step={0.05} display={`${Math.round(settings.coreWidth * 100)}%`} onChange={(value) => changeSetting("coreWidth", value)} />
           <Slider label="辉光强度" value={settings.intensity} min={0.5} max={2} step={0.05} display={`${Math.round(settings.intensity * 100)}%`} onChange={(value) => changeSetting("intensity", value)} />
           <div className="easing-note"><svg viewBox="0 0 60 26" width="52" height="25" fill="none" aria-hidden="true"><path d="M1 24H59M1 2v22" stroke="#38342f" /><path d="M2 23C13 4 27 3 57 3" stroke="#ff8958" strokeWidth="1.5" /></svg><span>快速起势 <span className="text-dim">→</span> 柔和收尾</span><span className="easing-tag">EASE OUT</span></div>
         </div>
