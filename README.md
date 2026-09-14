@@ -2,7 +2,25 @@
 
 Next.js + TypeScript + 原生 WebGL 的图片过场实验。两张用户提供的原图已经放在 `public/images/`。
 
-![火焰转场预览：红黄白火焰带连接冷银与熔金人像，右侧提供播放和参数控制](docs/images/ember-transition.png)
+## Templates
+
+### 纯字幕
+
+6 秒 · 红色磨损字形与动态擦除。
+
+https://github.com/user-attachments/assets/369d4c6f-e119-482d-adf6-df0ecbbdd9f9
+
+### 带字幕
+
+45 秒 · 火焰转场，每首开头的重音显示歌名。
+
+https://github.com/user-attachments/assets/a184b2df-3938-49c5-a301-4005ed6353c4
+
+### 不带字幕（默认）
+
+45 秒 · 保留现场原声，火焰转场，烟花收尾。
+
+https://github.com/user-attachments/assets/05bc28b8-9e71-43b9-bded-33a23b5897cf
 
 ## 运行
 
@@ -28,7 +46,7 @@ Skill 内置渲染资产，可独立于网页运行。将整个 `skills/theweekn
 - 可切换纯黑、现场和透明背景，对照参考图，暂停、拖动时间或前进一帧。
 - 导出透明 PNG 只包含当前帧的文字效果。减少动态效果偏好下默认暂停。
 - `lib/distressed-title-renderer.ts` 的 `render(time, settings)` 是确定性的透明图层渲染入口，便于后续接入视频逐帧合成；GSAP 负责交互预览的时钟。
-- 当前是字体效果预览，尚未将字幕加入成片或接入音频卡点。
+- 网页用于预览与调参；视频剪辑、重音检测和可选字幕合成由 `theweeknd-highlights` Skill 完成。
 
 ```bash
 npm run typecheck
@@ -64,4 +82,4 @@ npm start
 - `lib/flame-shaders.ts`：火焰、混合遮罩、颜色、热扰动与运动曲线。
 - `app/globals.css`：响应式界面。
 
-素材为本次提供的原图。私有源码仓库：[SummonLav/ember-transition](https://github.com/SummonLav/ember-transition)。
+素材为本次提供的原图。私有源码仓库：[SummonLav/theweeknd-concert-transition](https://github.com/SummonLav/theweeknd-concert-transition)。
