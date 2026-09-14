@@ -1,18 +1,52 @@
-# EMBER · 火焰转场
+# The Weeknd Concert Transition
 
 Next.js + TypeScript + 原生 WebGL 的图片过场实验。两张用户提供的原图已经放在 `public/images/`。
 
-![EMBER 火焰转场预览：红黄白火焰带连接冷银与熔金人像，右侧提供播放和参数控制](docs/images/ember-transition.png)
+## Templates
+
+### 纯字幕
+
+6 秒 · 红色磨损字形与动态擦除。
+
+https://github.com/user-attachments/assets/369d4c6f-e119-482d-adf6-df0ecbbdd9f9
+
+### 带字幕
+
+45 秒 · 火焰转场，每首开头的重音显示歌名。
+
+https://github.com/user-attachments/assets/a184b2df-3938-49c5-a301-4005ed6353c4
+
+### 不带字幕（默认）
+
+45 秒 · 保留现场原声，火焰转场，烟花收尾。
+
+https://github.com/user-attachments/assets/05bc28b8-9e71-43b9-bded-33a23b5897cf
 
 ## 运行
 
 ```bash
-cd /Users/lavendashan/Documents/ember-transition
+cd /Users/lavendashan/Desktop/theweeknd-concert-transition
 npm install
 npm run dev
 ```
 
 打开 http://localhost:3017 。项目默认使用 3017 端口。
+
+## 演唱会剪辑 Skill
+
+[theweeknd-highlights](skills/theweeknd-highlights/SKILL.md) 将现场视频剪成高光成片，默认 **45 秒、720×1280、30 fps、火焰转场，不加字幕**。只有明确要求时才添加重音歌名。
+
+Skill 内置渲染资产，可独立于网页运行。将整个 `skills/theweeknd-highlights` 目录复制到 `~/.codex/skills/`（自定义 `CODEX_HOME` 时使用其 `skills/` 目录），即可通过 `$theweeknd-highlights` 使用。依赖安装、配置和导出命令见 Skill 说明；[示例配置](skills/theweeknd-highlights/references/the-weeknd-example.json) 仅引用本地视频路径，使用时按素材位置修改。
+
+## 红字字体实验
+
+打开 `/typography` 预览参考 MV 的红色模板字幕。字母、数字与常用标点采用项目内绘制的矢量字形；其他文字使用系统粗体回退。红色 `#F20808` 由提供的 Display P3 参考转换为 sRGB，字内叠加动态透明擦除、黑白划痕和轻微扫描线错位。
+
+- 支持修改镂空小字、多行主标题，调整字号、磨损量、信号强度和速度。
+- 可切换纯黑、现场和透明背景，对照参考图，暂停、拖动时间或前进一帧。
+- 导出透明 PNG 只包含当前帧的文字效果。减少动态效果偏好下默认暂停。
+- `lib/distressed-title-renderer.ts` 的 `render(time, settings)` 是确定性的透明图层渲染入口，便于后续接入视频逐帧合成；GSAP 负责交互预览的时钟。
+- 网页用于预览与调参；视频剪辑、重音检测和可选字幕合成由 `theweeknd-highlights` Skill 完成。
 
 ```bash
 npm run typecheck
@@ -27,7 +61,7 @@ npm start
 - 首次加载后自动播放一次；系统启用“减少动态效果”时等待手动播放。
 - 播放／暂停：按钮或空格。重播：右侧重播按钮或 `R`。
 - 拖动“转场进度”可逐段查看并暂停火焰。点击图片缩略图可查看对应端点。
-- 时长、火焰宽度和辉光强度实时生效。“重置”恢复三个参数的默认值。
+- 时长、火焰宽度、焰心宽度和辉光强度实时生效。“焰心宽度”单独调节最亮白色条带的粗细（20%–300%）。“重置”恢复四个参数的默认值。
 - “交换”切换图片先后顺序；火焰始终从底部向顶部运动。
 - “循环播放”在每次完成后停留 1.3 秒，再交换前后图进行下一次过场。
 - 预览右下角进入全屏，支持桌面和移动端布局。
@@ -48,4 +82,4 @@ npm start
 - `lib/flame-shaders.ts`：火焰、混合遮罩、颜色、热扰动与运动曲线。
 - `app/globals.css`：响应式界面。
 
-素材为本次提供的原图。私有源码仓库：[SummonLav/ember-transition](https://github.com/SummonLav/ember-transition)。
+素材为本次提供的原图。私有源码仓库：[SummonLav/theweeknd-concert-transition](https://github.com/SummonLav/theweeknd-concert-transition)。

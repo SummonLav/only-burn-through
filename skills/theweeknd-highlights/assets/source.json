@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/SummonLav/theweeknd-concert-transition",
+  "commit": "c72c03925dd28f1a2f4b02d89116a5fe017cf35e",
+  "files": [
+    "lib/flame-shaders.ts",
+    "lib/distressed-title-renderer.ts",
+    "lib/stencil-glyphs.ts"
+  ],
+  "note": "Bundled rendering snapshot; no running Next.js app or source checkout required. Original approximate stencil glyphs, not the identified official MV font."
+}

@@ -1,0 +1,8 @@
+{
+  "name": "theweeknd-highlights-skill",
+  "version": "1.0.1",
+  "private": true,
+  "dependencies": {
+    "playwright": "1.63.0"
+  }
+}

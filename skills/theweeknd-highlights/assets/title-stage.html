@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>Concert title renderer</title>
+<canvas id="title"></canvas><canvas id="output"></canvas>
+<script type="module">
+import { DistressedTitleRenderer } from '/assets/distressed-title-renderer.js';
+const title = document.getElementById('title');
+const output = document.getElementById('output');
+const context = output.getContext('2d');
+const renderer = new DistressedTitleRenderer(title);
+await document.fonts.ready;
+window.renderTitle = ({frame, frames, fps, width, height, settings}) => {
+  renderer.resize(width, height);
+  if(output.width !== width || output.height !== height) { output.width=width; output.height=height; }
+  const time = frame / fps;
+  renderer.render(time, settings);
+  context.clearRect(0,0,width,height);
+  context.save();
+  // Full-opacity attack on the cue frame, quick scale settlement, then a short exit.
+  const scale = 1 + 0.06 * Math.exp(-time * 23);
+  context.globalAlpha = Math.min(1, Math.max(0, (frames-1-frame)/(fps*0.18)));
+  context.translate(width/2,height/2);
+  context.scale(scale,scale);
+  context.shadowColor = 'rgba(0,0,0,0.85)';
+  context.shadowBlur = width * 0.02;
+  context.shadowOffsetY = height * 0.002;
+  context.drawImage(title,-width/2,-height/2);
+  context.restore();
+  return output.toDataURL('image/png').split(',')[1];
+};
+window.ready = true;
+</script></html>

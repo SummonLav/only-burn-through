@@ -1,6 +1,6 @@
 import { fragmentShader, vertexShader } from "./flame-shaders";
 
-export type FlameSettings = { duration: number; width: number; intensity: number };
+export type FlameSettings = { duration: number; width: number; coreWidth: number; intensity: number };
 
 export class FlameRenderer {
   private gl: WebGLRenderingContext;
@@ -57,7 +57,7 @@ export class FlameRenderer {
     const position = gl.getAttribLocation(program, "aPosition");
     gl.enableVertexAttribArray(position);
     gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-    for (const name of ["uFrom", "uTo", "uFromSize", "uToSize", "uResolution", "uProgress", "uTime", "uWidth", "uIntensity"]) {
+    for (const name of ["uFrom", "uTo", "uFromSize", "uToSize", "uResolution", "uProgress", "uTime", "uWidth", "uCoreWidth", "uIntensity"]) {
       this.locations[name] = gl.getUniformLocation(program, name);
     }
   }
@@ -114,6 +114,7 @@ export class FlameRenderer {
     gl.uniform1f(this.locations.uProgress, progress);
     gl.uniform1f(this.locations.uTime, time);
     gl.uniform1f(this.locations.uWidth, settings.width);
+    gl.uniform1f(this.locations.uCoreWidth, settings.coreWidth);
     gl.uniform1f(this.locations.uIntensity, settings.intensity);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
   }
