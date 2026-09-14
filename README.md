@@ -1,18 +1,28 @@
-# EMBER · 火焰转场
+# The Weeknd Concert Transition
 
 Next.js + TypeScript + 原生 WebGL 的图片过场实验。两张用户提供的原图已经放在 `public/images/`。
 
-![EMBER 火焰转场预览：红黄白火焰带连接冷银与熔金人像，右侧提供播放和参数控制](docs/images/ember-transition.png)
+![火焰转场预览：红黄白火焰带连接冷银与熔金人像，右侧提供播放和参数控制](docs/images/ember-transition.png)
 
 ## 运行
 
 ```bash
-cd /Users/lavendashan/Documents/ember-transition
+cd /Users/lavendashan/Desktop/theweeknd-concert-transition
 npm install
 npm run dev
 ```
 
 打开 http://localhost:3017 。项目默认使用 3017 端口。
+
+## 红字字体实验
+
+打开 `/typography` 预览参考 MV 的红色模板字幕。字母、数字与常用标点采用项目内绘制的矢量字形；其他文字使用系统粗体回退。红色 `#F20808` 由提供的 Display P3 参考转换为 sRGB，字内叠加动态透明擦除、黑白划痕和轻微扫描线错位。
+
+- 支持修改镂空小字、多行主标题，调整字号、磨损量、信号强度和速度。
+- 可切换纯黑、现场和透明背景，对照参考图，暂停、拖动时间或前进一帧。
+- 导出透明 PNG 只包含当前帧的文字效果。减少动态效果偏好下默认暂停。
+- `lib/distressed-title-renderer.ts` 的 `render(time, settings)` 是确定性的透明图层渲染入口，便于后续接入视频逐帧合成；GSAP 负责交互预览的时钟。
+- 当前是字体效果预览，尚未将字幕加入成片或接入音频卡点。
 
 ```bash
 npm run typecheck
