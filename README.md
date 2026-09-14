@@ -14,6 +14,12 @@ npm run dev
 
 打开 http://localhost:3017 。项目默认使用 3017 端口。
 
+## 演唱会剪辑 Skill
+
+[theweeknd-highlights](skills/theweeknd-highlights/SKILL.md) 将现场视频剪成高光成片，默认 **45 秒、720×1280、30 fps、火焰转场，不加字幕**。只有明确要求时才添加重音歌名。
+
+Skill 内置渲染资产，可独立于网页运行。将整个 `skills/theweeknd-highlights` 目录复制到 `~/.codex/skills/`（自定义 `CODEX_HOME` 时使用其 `skills/` 目录），即可通过 `$theweeknd-highlights` 使用。依赖安装、配置和导出命令见 Skill 说明；[示例配置](skills/theweeknd-highlights/references/the-weeknd-example.json) 仅引用本地视频路径，使用时按素材位置修改。
+
 ## 红字字体实验
 
 打开 `/typography` 预览参考 MV 的红色模板字幕。字母、数字与常用标点采用项目内绘制的矢量字形；其他文字使用系统粗体回退。红色 `#F20808` 由提供的 Display P3 参考转换为 sRGB，字内叠加动态透明擦除、黑白划痕和轻微扫描线错位。

@@ -1,0 +1,33 @@
+{
+  "duration": 45,
+  "width": 720,
+  "height": 1280,
+  "fps": 30,
+  "transition_seconds": 2.4,
+  "title_seconds": 1.5,
+  "clips": [
+    {
+      "source": "~/Downloads/[DLBunny.com][xhs]我打电话给你只在凌晨 五！点！半！.mp4",
+      "song": "THE HILLS",
+      "display": "THE\nHILLS",
+      "start": 47,
+      "duration": 16
+    },
+    {
+      "source": "~/Downloads/[DLBunny.com][xhs]全场大合唱Die for you.mp4",
+      "song": "DIE FOR YOU",
+      "display": "DIE FOR\nYOU",
+      "start": 26.5,
+      "duration": 16.8
+    },
+    {
+      "source": "~/Downloads/[DLBunny.com][xhs]The Weeknd 伦敦首场结尾烟花🎆.mp4",
+      "song": "STARBOY",
+      "display": "STARBOY",
+      "role": "finale",
+      "start": 34,
+      "duration": 17
+    }
+  ],
+  "subtitles": false
+}
