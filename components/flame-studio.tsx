@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState, type CSSProperties } from "re
 import { FlameRenderer, type FlameSettings } from "@/lib/flame-renderer";
 import { StudioHeader } from "./studio-header";
 
-const defaults: FlameSettings = { duration: 3.8, width: 1, coreWidth: 1, intensity: 1.15 };
+const defaults: FlameSettings = { duration: 2, width: 1.6, coreWidth: 1.2, intensity: 1.2 };
 const images = [
   { src: "/images/chrome.png", label: "冷银", name: "CHROME" },
   { src: "/images/gold.png", label: "熔金", name: "GOLD" },
