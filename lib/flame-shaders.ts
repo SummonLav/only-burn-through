@@ -45,6 +45,19 @@ float fbm(vec2 p) {
   return n;
 }
 
+// Vertical temperature ramp: base (hottest, t=0) climbs to tip (coolest, t=1).
+// 蓝色 / 蓝白 → 黄白 / 黄色 → 橙色 → 橙红 / 暗红
+vec3 flameRamp(float t) {
+  vec3 c = vec3(0.10, 0.36, 1.00);                                    // 蓝色
+  c = mix(c, vec3(0.62, 0.85, 1.00), smoothstep(0.00, 0.14, t));      // 蓝白
+  c = mix(c, vec3(1.00, 0.98, 0.86), smoothstep(0.14, 0.30, t));      // 黄白
+  c = mix(c, vec3(1.00, 0.82, 0.30), smoothstep(0.30, 0.46, t));      // 黄色
+  c = mix(c, vec3(1.00, 0.50, 0.12), smoothstep(0.46, 0.66, t));      // 橙色
+  c = mix(c, vec3(0.95, 0.23, 0.05), smoothstep(0.66, 0.85, t));      // 橙红
+  c = mix(c, vec3(0.52, 0.06, 0.02), smoothstep(0.85, 1.00, t));      // 暗红
+  return c;
+}
+
 // Contain both portrait originals without stretching or cutting off the figure.
 vec3 photo(sampler2D source, vec2 uv, vec2 size) {
   float canvasAspect = uResolution.x / uResolution.y;
@@ -106,12 +119,19 @@ void main() {
   float fire = (body + plume) * alive;
   float glow = exp(-abs(d) / (0.085 * uWidth)) * alive;
 
-  // Warm emission layers: crimson outside, orange/yellow body, ivory-white core.
-  vec3 emission = vec3(1.0, 0.055, 0.009) * fire * 1.2;
-  emission += vec3(1.0, 0.34, 0.015) * pow(body, 1.65) * 2.1 * alive;
-  emission += vec3(1.0, 0.79, 0.24) * pow(body, 3.0) * 2.0 * alive;
-  emission += vec3(1.0, 0.97, 0.82) * core * 2.3 * alive;
-  emission += vec3(0.55, 0.065, 0.014) * glow * 0.45;
+  // Vertical temperature gradient across the band: the trailing base (d < 0) burns
+  // blue-hot, the leading tip (d > 0) cools to dark red. Brightness layers stay as
+  // luminance and are tinted by the ramp so every hue survives the tonemap.
+  float grad_t = smoothstep(-2.2 * width, 3.8 * width, d);
+  vec3 grad = flameRamp(grad_t);
+  vec3 emission = grad * fire * 1.25;
+  emission += grad * pow(body, 1.65) * 2.1 * alive;
+  emission += grad * pow(body, 3.0) * 1.7 * alive;
+  // Incandescent core keeps a luminous highlight, biased toward the hot base hue.
+  vec3 coreHue = mix(vec3(0.72, 0.88, 1.0), grad, 0.4);
+  emission += coreHue * core * 2.3 * alive;
+  // Soft ambient glow follows the gradient (blue below, red above).
+  emission += grad * glow * 0.5;
 
   // Sparse embers lift a short distance above the band; none fill the whole frame.
   vec2 grid = vec2(p.x * 85.0, (p.y - time * 0.065) * 72.0);

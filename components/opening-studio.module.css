@@ -1,0 +1,46 @@
+.solo {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 28px 0 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Title overlay sits above the flame canvas; the flame front masks it away. */
+.titleCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.transport {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.transport .scrubber {
+  flex: 1;
+  min-width: 0;
+}
+
+.stamp {
+  min-width: 40px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  color: #c9c1b4;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 700px) {
+  .solo { padding: 20px 0 32px; }
+  .transport { flex-wrap: wrap; gap: 12px; }
+  .transport .scrubber { order: 3; flex-basis: 100%; }
+}
