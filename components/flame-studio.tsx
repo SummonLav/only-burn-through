@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { FlameRenderer, type FlameSettings } from "@/lib/flame-renderer";
+import { useLocale } from "./locale-provider";
 import { StudioHeader } from "./studio-header";
 
 const defaults: FlameSettings = { duration: 2, width: 1.6, coreWidth: 1.2, intensity: 1.2 };
@@ -32,6 +33,7 @@ function Slider({ label, value, min, max, step, display, onChange }: {
 }
 
 export function FlameStudio() {
+  const { t } = useLocale();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const rendererRef = useRef<FlameRenderer | null>(null);
@@ -220,43 +222,43 @@ export function FlameStudio() {
     <StudioHeader active="transition" />
 
     <div className="workspace">
-      <section className="preview-section" aria-label="火焰转场预览">
+      <section className="preview-section" aria-label={t("火焰转场预览")}>
         <div className="stage" ref={stageRef}>
           <div className="canvas-wrap">
             {/* Original image also provides a useful fallback before WebGL is ready. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="fallback-image" src={from.src} alt="金属人像转场原图" />
-            <canvas ref={canvasRef} className={ready ? "flame-canvas ready" : "flame-canvas"} aria-label="从下向上推进的不规则火焰带，在冷银和熔金人像之间过渡" />
+            <img className="fallback-image" src={from.src} alt={t("金属人像转场原图")} />
+            <canvas ref={canvasRef} className={ready ? "flame-canvas ready" : "flame-canvas"} aria-label={t("从下向上推进的不规则火焰带，在冷银和熔金人像之间过渡")} />
           </div>
-          <div className="stage-bottom"><button className="icon-button glass" onClick={() => void fullscreen()} aria-label={isFullscreen ? "退出全屏" : "全屏预览"}><Icon name="expand" /></button></div>
-          {error && <div className="canvas-message" role="alert"><p>{error}</p><button onClick={() => { setError(""); setRetry((key) => key + 1); }}>重新加载</button></div>}
-          {!ready && !error && <span className="loading-label" role="status">正在准备画面…</span>}
+          <div className="stage-bottom"><button className="icon-button glass" onClick={() => void fullscreen()} aria-label={isFullscreen ? t("退出全屏") : t("全屏预览")}><Icon name="expand" /></button></div>
+          {error && <div className="canvas-message" role="alert"><p>{t(error)}</p><button onClick={() => { setError(""); setRetry((key) => key + 1); }}>{t("重新加载")}</button></div>}
+          {!ready && !error && <span className="loading-label" role="status">{t("正在准备画面…")}</span>}
         </div>
       </section>
 
-      <aside className="controls" aria-label="转场控制">
-        <div className="section-label"><span>画面</span><button className="text-button" onClick={swap} disabled={!ready} aria-label="交换前后图片"><Icon name="swap" size={14} /> 交换</button></div>
+      <aside className="controls" aria-label={t("转场控制")}>
+        <div className="section-label"><span>{t("画面")}</span><button className="text-button" onClick={swap} disabled={!ready} aria-label={t("交换前后图片")}><Icon name="swap" size={14} />{t("交换")}</button></div>
         <div className="image-pair">
-          {[from, to].map((item, index) => <button className={`image-tile ${progress === index ? "selected" : ""}`} key={item.name} onClick={() => seek(index)} disabled={!ready} aria-label={index === 0 ? "查看转场前图片" : "查看转场后图片"}>
+          {[from, to].map((item, index) => <button className={`image-tile ${progress === index ? "selected" : ""}`} key={item.name} onClick={() => seek(index)} disabled={!ready} aria-label={index === 0 ? t("查看转场前图片") : t("查看转场后图片")}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={item.src} alt={item.label} />
-            <span className="tile-position">{index === 0 ? "转场前" : "转场后"}</span>
+            <img src={item.src} alt={t(item.label)} />
+            <span className="tile-position">{index === 0 ? t("转场前") : t("转场后")}</span>
           </button>)}
           <span className="pair-arrow" aria-hidden="true">↗</span>
         </div>
 
         <div className="parameter-section">
-          <div className="section-label"><span>火焰</span><button className="text-button" onClick={() => { interacted.current = true; values.current.settings = defaults; setSettings(defaults); draw(); }}>重置</button></div>
-          <Slider label="转场时长" value={settings.duration} min={1.5} max={7} step={0.1} display={`${settings.duration.toFixed(1)} s`} onChange={(value) => changeSetting("duration", value)} />
-          <Slider label="火焰宽度" value={settings.width} min={0.5} max={1.8} step={0.05} display={`${Math.round(settings.width * 100)}%`} onChange={(value) => changeSetting("width", value)} />
-          <Slider label="焰心宽度" value={settings.coreWidth} min={0.2} max={3} step={0.05} display={`${Math.round(settings.coreWidth * 100)}%`} onChange={(value) => changeSetting("coreWidth", value)} />
-          <Slider label="辉光强度" value={settings.intensity} min={0.5} max={2} step={0.05} display={`${Math.round(settings.intensity * 100)}%`} onChange={(value) => changeSetting("intensity", value)} />
+          <div className="section-label"><span>{t("火焰")}</span><button className="text-button" onClick={() => { interacted.current = true; values.current.settings = defaults; setSettings(defaults); draw(); }}>{t("重置")}</button></div>
+          <Slider label={t("转场时长")} value={settings.duration} min={1.5} max={7} step={0.1} display={`${settings.duration.toFixed(1)} s`} onChange={(value) => changeSetting("duration", value)} />
+          <Slider label={t("火焰宽度")} value={settings.width} min={0.5} max={1.8} step={0.05} display={`${Math.round(settings.width * 100)}%`} onChange={(value) => changeSetting("width", value)} />
+          <Slider label={t("焰心宽度")} value={settings.coreWidth} min={0.2} max={3} step={0.05} display={`${Math.round(settings.coreWidth * 100)}%`} onChange={(value) => changeSetting("coreWidth", value)} />
+          <Slider label={t("辉光强度")} value={settings.intensity} min={0.5} max={2} step={0.05} display={`${Math.round(settings.intensity * 100)}%`} onChange={(value) => changeSetting("intensity", value)} />
         </div>
 
         <div className="playback">
-          <Slider label="转场进度" value={progress} min={0} max={1} step={0.001} display={`${Math.round(progress * 100)}%`} onChange={seek} />
-          <div className="play-buttons"><button className="play-button" onClick={play} disabled={!ready}><Icon name={playing ? "pause" : progress >= 1 ? "replay" : "play"} />{playing ? "暂停" : progress >= 1 ? "重播" : "播放"}</button><button className="replay-button" onClick={restart} disabled={!ready} aria-label="从头重播" title="从头重播 · R"><Icon name="replay" /></button></div>
-          <div className="playback-options"><label className="loop-control"><input type="checkbox" checked={loop} onChange={(event) => { interacted.current = true; setLoop(event.target.checked); if (event.target.checked && progress === 0) setPlaying(true); }} /><span className="switch-track" />循环播放</label></div>
+          <Slider label={t("转场进度")} value={progress} min={0} max={1} step={0.001} display={`${Math.round(progress * 100)}%`} onChange={seek} />
+          <div className="play-buttons"><button className="play-button" onClick={play} disabled={!ready}><Icon name={playing ? "pause" : progress >= 1 ? "replay" : "play"} />{playing ? t("暂停") : progress >= 1 ? t("重播") : t("播放")}</button><button className="replay-button" onClick={restart} disabled={!ready} aria-label={t("从头重播")} title={t("从头重播 · R")}><Icon name="replay" /></button></div>
+          <div className="playback-options"><label className="loop-control"><input type="checkbox" checked={loop} onChange={(event) => { interacted.current = true; setLoop(event.target.checked); if (event.target.checked && progress === 0) setPlaying(true); }} /><span className="switch-track" />{t("循环播放")}</label></div>
         </div>
       </aside>
     </div>

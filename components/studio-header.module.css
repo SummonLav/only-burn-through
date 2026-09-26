@@ -5,3 +5,7 @@
 .switcher a:hover{color:var(--text);background:#25221e}
 .switcher a[aria-current=page]{background:#353029;color:var(--text)}
 @media(max-width:700px){.header{gap:14px;padding:20px 0}.brand{flex-basis:100%;font-size:16px}.switcher a{min-height:34px}}
+.languages{display:flex;gap:2px;margin-left:auto}
+.languages button{border:0;border-radius:3px;background:transparent;color:var(--muted);font-size:12px;padding:7px 8px}
+.languages button[aria-pressed=true]{color:var(--text);background:#353029}
+@media(max-width:700px){.header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 8px}.brand{grid-column:1;font-size:16px}.languages{grid-column:2;grid-row:1}.switcher{grid-column:1/-1;min-width:0}.switcher a{flex:1;padding:0 8px;font-size:11px}}

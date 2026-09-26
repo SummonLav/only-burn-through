@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { FlameRenderer, type FlameSettings } from "@/lib/flame-renderer";
 import { DistressedTitleRenderer, type TitleSettings } from "@/lib/distressed-title-renderer";
+import { useLocale } from "./locale-provider";
 import { StudioHeader } from "./studio-header";
 import styles from "./opening-studio.module.css";
 
@@ -29,6 +30,7 @@ function Icon({ name, size = 18 }: { name: "play" | "pause" | "replay"; size?: n
 }
 
 export function OpeningStudio() {
+  const { t } = useLocale();
   const stageRef = useRef<HTMLDivElement>(null);
   const flameRef = useRef<HTMLCanvasElement>(null);
   const titleRef = useRef<HTMLCanvasElement>(null);
@@ -193,28 +195,28 @@ export function OpeningStudio() {
     <StudioHeader active="opening" />
 
     <div className={styles.solo}>
-      <section className="preview-section" aria-label="Singapore weekend 开场预览">
+      <section className="preview-section" aria-label={t("Singapore weekend 开场预览")}>
         <div className="stage" ref={stageRef}>
           <div className="canvas-wrap">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="fallback-image" src={images[0]} alt="冷银人像开场底图" />
-            <canvas ref={flameRef} className={ready ? "flame-canvas ready" : "flame-canvas"} aria-label="火焰从底部升起，将 Singapore weekend 标题烧散并过渡到熔金人像" />
+            <img className="fallback-image" src={images[0]} alt={t("冷银人像开场底图")} />
+            <canvas ref={flameRef} className={ready ? "flame-canvas ready" : "flame-canvas"} aria-label={t("火焰从底部升起，将 Singapore weekend 标题烧散并过渡到熔金人像")} />
             <canvas ref={titleRef} className={styles.titleCanvas} aria-hidden="true" />
           </div>
-          {error && <div className="canvas-message" role="alert"><p>{error}</p><button onClick={() => { setError(""); setRetry((key) => key + 1); }}>重新加载</button></div>}
-          {!ready && !error && <span className="loading-label" role="status">正在准备开场…</span>}
+          {error && <div className="canvas-message" role="alert"><p>{t(error)}</p><button onClick={() => { setError(""); setRetry((key) => key + 1); }}>{t("重新加载")}</button></div>}
+          {!ready && !error && <span className="loading-label" role="status">{t("正在准备开场…")}</span>}
         </div>
       </section>
 
       <div className={styles.transport}>
         <button className="play-button" onClick={toggle} disabled={!ready}>
-          <Icon name={playing ? "pause" : done ? "replay" : "play"} />{playing ? "暂停" : done ? "重播" : "播放"}
+          <Icon name={playing ? "pause" : done ? "replay" : "play"} />{playing ? t("暂停") : done ? t("重播") : t("播放")}
         </button>
-        <button className="replay-button" onClick={replay} disabled={!ready} aria-label="从头重播" title="从头重播 · R"><Icon name="replay" /></button>
-        <input className={styles.scrubber} type="range" aria-label="开场进度" min={0} max={TOTAL} step={0.01} value={elapsed}
+        <button className="replay-button" onClick={replay} disabled={!ready} aria-label={t("从头重播")} title={t("从头重播 · R")}><Icon name="replay" /></button>
+        <input className={styles.scrubber} type="range" aria-label={t("开场进度")} min={0} max={TOTAL} step={0.01} value={elapsed}
           style={{ "--fill": `${elapsed / TOTAL * 100}%` } as CSSProperties}
           onChange={(event) => seek(Number(event.target.value))} disabled={!ready} />
-        <output className={styles.stamp}>{elapsed < HOLD ? "标题" : done ? "熔金" : "火焰"}</output>
+        <output className={styles.stamp}>{elapsed < HOLD ? t("标题") : done ? t("熔金") : t("火焰")}</output>
       </div>
     </div>
   </main>;

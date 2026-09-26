@@ -4,6 +4,7 @@ import { useRef, useState, type CSSProperties } from "react";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { defaultTitleSettings, DistressedTitleRenderer, TITLE_DURATION, type TitleSettings } from "@/lib/distressed-title-renderer";
+import { useLocale } from "./locale-provider";
 import { StudioHeader } from "./studio-header";
 import styles from "./typography-studio.module.css";
 
@@ -17,6 +18,7 @@ function Parameter({ label, value, min, max, step, display, onChange }: { label:
 }
 
 export function TypographyStudio() {
+  const { t } = useLocale();
   const root = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const renderer = useRef<DistressedTitleRenderer | null>(null);
@@ -96,12 +98,12 @@ export function TypographyStudio() {
     canvas.current.toBlob(blob => {
       if (!blob) return;
       const url = URL.createObjectURL(blob), link = document.createElement("a");
-      link.href = url; link.download = "the-weeknd-title.png"; link.click();
+      link.href = url; link.download = "only-burn-through-title.png"; link.click();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     });
   };
   const presets = [
-    { label: "参考字样", eyebrow: "AND", text: "LILY-ROSE\nDEPP" },
+    { label: t("参考字样"), eyebrow: "AND", text: "LILY-ROSE\nDEPP" },
     { label: "THE WEEKND", eyebrow: "LIVE IN", text: "THE\nWEEKND" },
     { label: "DIE FOR YOU", eyebrow: "", text: "DIE FOR\nYOU" },
   ];
@@ -110,37 +112,37 @@ export function TypographyStudio() {
     <StudioHeader active="typography" />
 
     <main className={styles.workspace}>
-      <section className={styles.preview} aria-label="动态字体预览">
-        <div className={styles.previewHeading}><div className={styles.segmented} aria-label="对比参考"><button aria-pressed={!reference} onClick={() => setReference(false)}>效果</button><button aria-pressed={reference} onClick={() => setReference(true)}>参考</button></div></div>
+      <section className={styles.preview} aria-label={t("动态字体预览")}>
+        <div className={styles.previewHeading}><div className={styles.segmented} aria-label={t("对比参考")}><button aria-pressed={!reference} onClick={() => setReference(false)}>{t("效果")}</button><button aria-pressed={reference} onClick={() => setReference(true)}>{t("参考")}</button></div></div>
         <div className={`${styles.stage} ${background === "transparent" ? styles.checker : ""}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           {background === "concert" && <img src="/images/title-concert.jpg" alt="" className={styles.backdrop} />}
-          <canvas ref={canvas} className={styles.canvas} style={{ opacity: reference ? 0 : 1 }} aria-label={`红色动态磨损字幕：${settings.eyebrow} ${settings.text.replaceAll("\n", " ")}`} />
+          <canvas ref={canvas} className={styles.canvas} style={{ opacity: reference ? 0 : 1 }} aria-label={`${t("红色动态磨损字幕：")}${settings.eyebrow} ${settings.text.replaceAll("\n", " ")}`} />
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          {reference && <img src="/references/mv-title.png" alt="提供的官方 MV 字体参考：红色模板字形、镂空 AND 和字内磨损" className={styles.reference} />}
-          {error && <p role="alert" className={styles.error}>{error}</p>}
-          {!ready && !error && <span className={styles.loading}>正在准备字形…</span>}
+          {reference && <img src="/references/mv-title.png" alt={t("提供的官方 MV 字体参考：红色模板字形、镂空 AND 和字内磨损")} className={styles.reference} />}
+          {error && <p role="alert" className={styles.error}>{t(error)}</p>}
+          {!ready && !error && <span className={styles.loading}>{t("正在准备字形…")}</span>}
         </div>
-        <div className={styles.belowStage}><div className={styles.backgrounds} aria-label="预览背景">{[{ id: "black", label: "纯黑" }, { id: "concert", label: "现场" }, { id: "transparent", label: "透明" }].map(item => <button key={item.id} aria-pressed={background === item.id} onClick={() => setBackground(item.id)}>{item.label}</button>)}</div></div>
+        <div className={styles.belowStage}><div className={styles.backgrounds} aria-label={t("预览背景")}>{[{ id: "black", label: t("纯黑") }, { id: "concert", label: t("现场") }, { id: "transparent", label: t("透明") }].map(item => <button key={item.id} aria-pressed={background === item.id} onClick={() => setBackground(item.id)}>{item.label}</button>)}</div></div>
         <div className={styles.transport}>
-          <div className={styles.transportHeading}><span>纹理时间</span><output>{time.toFixed(2)} <i>/</i> {TITLE_DURATION.toFixed(2)} s</output></div>
-          <input aria-label="纹理时间" type="range" min={0} max={TITLE_DURATION} step={1 / 30} value={time} style={{ "--fill": `${time / TITLE_DURATION * 100}%` } as CSSProperties} onChange={event => seek(Number(event.target.value))} />
-          <div className={styles.transportActions}><button className={styles.play} onClick={toggle} disabled={!ready}>{playing ? "Ⅱ 暂停" : "▶ 播放"}</button><button className={styles.step} onClick={() => seek((Math.round(clock.current.time * 30) + 1) % 181 / 30)} disabled={!ready}>前进一帧 <span>↦</span></button></div>
+          <div className={styles.transportHeading}><span>{t("纹理时间")}</span><output>{time.toFixed(2)} <i>/</i> {TITLE_DURATION.toFixed(2)} s</output></div>
+          <input aria-label={t("纹理时间")} type="range" min={0} max={TITLE_DURATION} step={1 / 30} value={time} style={{ "--fill": `${time / TITLE_DURATION * 100}%` } as CSSProperties} onChange={event => seek(Number(event.target.value))} />
+          <div className={styles.transportActions}><button className={styles.play} onClick={toggle} disabled={!ready}>{playing ? t("Ⅱ 暂停") : t("▶ 播放")}</button><button className={styles.step} onClick={() => seek((Math.round(clock.current.time * 30) + 1) % 181 / 30)} disabled={!ready}>{t("前进一帧")} <span>↦</span></button></div>
         </div>
       </section>
 
-      <aside className={styles.controls} aria-label="字体样式控制">
-        <div className={styles.controlHeading}><span>字样</span><button onClick={() => update(defaultTitleSettings)}>重置</button></div>
-        <label className={styles.textField}>镂空小字<input aria-label="镂空小字" type="text" maxLength={40} value={settings.eyebrow} onChange={event => update({ eyebrow: event.target.value })} placeholder="留空可隐藏" /></label>
-        <label className={styles.textField}>主标题<textarea aria-label="主标题" rows={2} maxLength={90} value={settings.text} onChange={event => update({ text: event.target.value })} spellCheck={false} /></label>
+      <aside className={styles.controls} aria-label={t("字体样式控制")}>
+        <div className={styles.controlHeading}><span>{t("字样")}</span><button onClick={() => update(defaultTitleSettings)}>{t("重置")}</button></div>
+        <label className={styles.textField}>{t("镂空小字")}<input aria-label={t("镂空小字")} type="text" maxLength={40} value={settings.eyebrow} onChange={event => update({ eyebrow: event.target.value })} placeholder={t("留空可隐藏")} /></label>
+        <label className={styles.textField}>{t("主标题")}<textarea aria-label={t("主标题")} rows={2} maxLength={90} value={settings.text} onChange={event => update({ text: event.target.value })} spellCheck={false} /></label>
         <div className={styles.presets}>{presets.map(preset => <button key={preset.label} aria-pressed={settings.text === preset.text && settings.eyebrow === preset.eyebrow} onClick={() => update({ text: preset.text, eyebrow: preset.eyebrow })}>{preset.label}</button>)}</div>
         <div className={styles.rule} />
-        <div className={styles.controlHeading}><span>质感</span></div>
-        <Parameter label="字号" value={settings.size} min={0.65} max={1.35} step={0.01} display={`${Math.round(settings.size * 100)}%`} onChange={size => update({ size })} />
-        <Parameter label="擦除与磨损" value={settings.wear} min={0} max={1} step={0.01} display={`${Math.round(settings.wear * 100)}%`} onChange={wear => update({ wear })} />
-        <Parameter label="老电视信号" value={settings.signal} min={0} max={1} step={0.01} display={`${Math.round(settings.signal * 100)}%`} onChange={signal => update({ signal })} />
-        <Parameter label="纹理变化速度" value={settings.speed} min={0.25} max={2} step={0.05} display={`${settings.speed.toFixed(2)}×`} onChange={speed => update({ speed })} />
-        <div className={styles.export}><button onClick={exportFrame} disabled={!ready}>导出透明 PNG <span>↓</span></button></div>
+        <div className={styles.controlHeading}><span>{t("质感")}</span></div>
+        <Parameter label={t("字号")} value={settings.size} min={0.65} max={1.35} step={0.01} display={`${Math.round(settings.size * 100)}%`} onChange={size => update({ size })} />
+        <Parameter label={t("擦除与磨损")} value={settings.wear} min={0} max={1} step={0.01} display={`${Math.round(settings.wear * 100)}%`} onChange={wear => update({ wear })} />
+        <Parameter label={t("老电视信号")} value={settings.signal} min={0} max={1} step={0.01} display={`${Math.round(settings.signal * 100)}%`} onChange={signal => update({ signal })} />
+        <Parameter label={t("纹理变化速度")} value={settings.speed} min={0.25} max={2} step={0.05} display={`${settings.speed.toFixed(2)}×`} onChange={speed => update({ speed })} />
+        <div className={styles.export}><button onClick={exportFrame} disabled={!ready}>{t("导出透明 PNG")} <span>↓</span></button></div>
       </aside>
     </main>
   </div>;
